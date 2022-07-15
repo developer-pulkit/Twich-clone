@@ -11,15 +11,19 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function Navbar() {
+const Navbar = () => {
   const [nav, setNav] = useState(false);
+
   const handleNav = () => {
     setNav(!nav);
   };
+
   const { data: session } = useSession();
 
+  // console.log(session);
+
   return (
-    <div className="fixed h-14 w-full flex flex-nowrap items-center p-4 bg-[#0e0e10] mb-[]">
+    <div className="fixed h-14 w-full flex flex-nowrap items-center p-4 bg-[#0e0e10] mb-[2px] z-10">
       {/* Left Side */}
       <div className="flex grow items-center justify-start">
         <Link href="/">
@@ -33,7 +37,7 @@ function Navbar() {
             />
           </a>
         </Link>
-        <p className="p-4">Browse</p>
+        <p className="p-4 font-bold hover:text-[#9147ff]">Browse</p>
         <div className="p-4">
           <Menu as="div" className="relative text-left">
             <div className="flex">
@@ -106,7 +110,7 @@ function Navbar() {
       </div>
       {/* Middle */}
       <div className="hidden md:flex grow-[2] items-center justify-center">
-        <div className="bg-gray-400 text-white flex justify-center items-center max-w-[400px] m-auto p-2.5 rounded-2xl">
+        <div className="bg-gray-500 text-white flex justify-between items-center max-w-[400px] w-full m-auto p-2 rounded-2xl">
           <div>
             <input
               type="text"
@@ -126,14 +130,20 @@ function Navbar() {
             <Link href="/account">
               <div>
                 <p className="pr-4 cursor-pointer">
-                  Welcome,{session.user.name}
+                  Welcome, {session.user.name}
                 </p>
               </div>
             </Link>
             <Menu as="div" className="relative text-left">
               <div className="flex">
                 <Menu.Button>
-                  <Image src={session.user.image} width="45" height="45" />
+                  <Image
+                    src={session.user.image}
+                    width="45"
+                    height="45"
+                    className="rounded-full"
+                    alt="/"
+                  />
                 </Menu.Button>
               </div>
 
@@ -150,8 +160,7 @@ function Navbar() {
                   <div className="py-1">
                     <Menu.Item>
                       {({ active }) => (
-                        <a
-                          href="/account"
+                        <p
                           className={classNames(
                             active
                               ? "bg-gray-500 text-gray-100"
@@ -159,15 +168,15 @@ function Navbar() {
                             "block px-4 py-2 text-sm"
                           )}
                         >
-                          Account
-                        </a>
+                          <Link href="/account">Account</Link>
+                        </p>
                       )}
                     </Menu.Item>
+
                     <Menu.Item>
                       {({ active }) => (
                         <p
-                          onClick={signOut}
-                          href="#"
+                          onClick={() => signOut()}
                           className={classNames(
                             active
                               ? "bg-gray-500 text-gray-100"
@@ -187,7 +196,7 @@ function Navbar() {
         ) : (
           <div className="flex items-center">
             <Link href="/account">
-              <button className="px-4 py-[6px] rounded-lg font-bold bg-[#9147ff]">
+              <button className="px-4 py-[6px] rounded-lg font-bold bg-[#9147ff] mr-2">
                 Account
               </button>
             </Link>
@@ -200,13 +209,13 @@ function Navbar() {
       <div onClick={handleNav} className="block md:hidden z-10 cursor-pointer">
         {nav ? <AiOutlineClose size={25} /> : <AiOutlineMenu size={25} />}
       </div>
-      {/* Mobile Menu */}
 
+      {/* Mobile Menu */}
       <div
         className={
           nav
             ? "md:hidden fixed top-0 left-0 w-full h-screen bg-[#0e0e10] flex justify-center items-center ease-in duration-300"
-            : "md:hidden fixed top-[100%] left-0 w-full h-screen bg-[#0e0e10] flex justify-center items-center ease-in duration-300"
+            : "md:hidden fixed top-[-100%] left-0 w-full h-screen bg-[#0e0e10] flex justify-center items-center ease-in duration-300"
         }
       >
         <ul className="text-center">
@@ -214,18 +223,18 @@ function Navbar() {
             <Link href="/">Home</Link>
           </li>
           <li onClick={() => setNav(false)} className="p-4 text-3xl font-bold">
-            <Link href="/">Live Channels</Link>
-          </li>{" "}
+            <Link href="/#live">Live Channels</Link>
+          </li>
           <li onClick={() => setNav(false)} className="p-4 text-3xl font-bold">
-            <Link href="/">Top Categories</Link>
-          </li>{" "}
+            <Link href="/#categories">Top Categories</Link>
+          </li>
           <li onClick={() => setNav(false)} className="p-4 text-3xl font-bold">
-            <Link href="/">Account</Link>
+            <Link href="/account">account</Link>
           </li>
         </ul>
       </div>
     </div>
   );
-}
+};
 
 export default Navbar;
